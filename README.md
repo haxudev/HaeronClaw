@@ -6,7 +6,9 @@
 
 > **⚠️ Runtime note.** The Azure Functions agent runtime foundation is still evolving, but this repository already layers production-oriented integrations and delivery patterns on top of it.
 
-HaeronClaw is a branded, cloud-hosted markdown agent built for Microsoft and Azure workflows. It keeps the simple authoring model of `AGENTS.md`, skills, MCP servers, and Python tools, then adds Azure hosting, Teams delivery, enterprise integrations, and artifact handling so the same agent can run beyond local Copilot Chat.
+HaeronClaw is a branded, cloud-hosted markdown agent built for Microsoft and Azure workflows. The overall implementation approach is derived from [Azure-Samples/functions-markdown-agent](https://github.com/Azure-Samples/functions-markdown-agent), then extended with Azure hosting, Teams delivery, enterprise integrations, and artifact handling so the same agent can run beyond local Copilot Chat.
+
+HaeronClaw is positioned as a team-level or department-level agent. It can use storage-backed `index_memory/` and `work_memory/` to build shared knowledge for a team, business unit, or domain workflow instead of relying only on per-user chat context. A natural next step is to add higher-level organizational intelligence layers such as Foundry IQ, Work IQ, and Fabric IQ.
 
 **Core features**
 
@@ -28,7 +30,7 @@ HaeronClaw is a branded, cloud-hosted markdown agent built for Microsoft and Azu
 - **Voice message transcription**: Teams audio attachments can be transcribed through Azure Speech so users can interact with HaeronClaw by voice.
 - **SharePoint and OneDrive ingestion**: shared document links can be resolved through Microsoft Graph OBO flows for grounded document-aware responses.
 - **Document and artifact generation**: the agent can produce deliverables such as PPTX, DOCX, XLSX, PDF, and other generated files, then deliver them through Teams, HTTP, or email-friendly links.
-- **Knowledge-backed responses**: internal `work_memory/` content and Microsoft Learn sources can be combined for source-grounded answers.
+- **Knowledge-backed responses**: storage-backed `work_memory/`, `index_memory/`, and Microsoft Learn sources can be combined for source-grounded answers.
 
 **Hosting your agent in Azure Functions**
 

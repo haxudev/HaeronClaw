@@ -6,7 +6,9 @@
 
 > **⚠️ 运行时说明。** Azure Functions Agent Runtime 的基础能力仍在演进中，但本仓库已经在此之上叠加了面向生产的集成与交付模式。
 
-HaeronClaw 是一个面向 Microsoft 与 Azure 工作流的品牌化云端 Markdown Agent。它保留了 `AGENTS.md`、skills、MCP server 和 Python tools 的简洁编写模型，同时增加了 Azure 托管、Teams 交付、企业集成和制品处理能力，使同一个 agent 不仅能在本地 Copilot Chat 中运行，也能在云端作为服务运行。
+HaeronClaw 是一个面向 Microsoft 与 Azure 工作流的品牌化云端 Markdown Agent。它的整体实现思路来源于 [Azure-Samples/functions-markdown-agent](https://github.com/Azure-Samples/functions-markdown-agent)，并在此基础上增加了 Azure 托管、Teams 交付、企业集成和制品处理能力，使同一个 agent 不仅能在本地 Copilot Chat 中运行，也能在云端作为服务运行。
+
+HaeronClaw 的定位是团队级或部门级 Agent。它可以利用存储侧的 `index_memory/` 与 `work_memory/` 构建团队、部门或领域工作流共享的知识底座，而不只是依赖单用户会话上下文。下一步的自然增强方向是继续引入更高层的组织智能能力，例如 Foundry IQ、Work IQ 和 Fabric IQ。
 
 **核心能力**
 
@@ -28,7 +30,7 @@ HaeronClaw 是一个面向 Microsoft 与 Azure 工作流的品牌化云端 Markd
 - **语音消息转录**：Teams 音频附件可通过 Azure Speech 转录，使用户能用语音与 HaeronClaw 交互。
 - **SharePoint 与 OneDrive 内容接入**：可通过 Microsoft Graph 的 OBO 流程解析共享文档链接，生成基于文档内容的回答。
 - **文档与制品生成**：agent 可生成 PPTX、DOCX、XLSX、PDF 等交付物，并通过 Teams、HTTP 或邮件友好的链接进行交付。
-- **知识增强回答**：可组合内部 `work_memory/` 内容与 Microsoft Learn 文档，输出带来源依据的回答。
+- **知识增强回答**：可组合存储侧的 `work_memory/`、`index_memory/` 与 Microsoft Learn 文档，输出带来源依据的回答。
 
 **将你的 agent 托管在 Azure Functions 上**
 
