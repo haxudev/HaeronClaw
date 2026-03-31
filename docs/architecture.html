@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Architecture — HaeronClaw</title>
+  <meta name="description" content="HaeronClaw project structure and architecture overview.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-left">
+      <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+      <a href="index.html" class="logo"><span class="logo-mark"></span><span>HaeronClaw</span></a>
+    </div>
+    <div class="header-right">
+      <button class="header-btn" id="lang-toggle" aria-label="Toggle language">中文</button>
+      <button class="header-btn" id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+      <a href="https://github.com/haxudev/haeronclaw" class="github-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<aside class="sidebar" id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-title"><span data-en>Getting Started</span><span data-zh>快速入门</span></div>
+      <a href="index.html" class="sidebar-link"><span class="nav-icon">🏠</span> <span data-en>Home</span><span data-zh>首页</span></a>
+      <a href="quickstart.html" class="sidebar-link"><span class="nav-icon">🚀</span> <span data-en>Quickstart</span><span data-zh>快速开始</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title"><span data-en>Core</span><span data-zh>核心</span></div>
+      <a href="features.html" class="sidebar-link"><span class="nav-icon">⚡</span> <span data-en>Features</span><span data-zh>功能特性</span></a>
+      <a href="api.html" class="sidebar-link"><span class="nav-icon">📡</span> <span data-en>API Reference</span><span data-zh>API 参考</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title"><span data-en>Deployment</span><span data-zh>部署</span></div>
+      <a href="architecture.html" class="sidebar-link active"><span class="nav-icon">🏗️</span> <span data-en>Architecture</span><span data-zh>架构说明</span></a>
+    </div>
+  </nav>
+</aside>
+
+<div class="docs-layout">
+  <main class="main-content">
+
+    <h1><span data-en>Architecture</span><span data-zh>架构说明</span></h1>
+
+    <section class="content">
+      <h2 id="overview">
+        <span data-en>Design Principle</span>
+        <span data-zh>设计理念</span>
+      </h2>
+      <p>
+        <span data-en>HaeronClaw separates the <strong>authoring surface</strong> (what you write) from the <strong>hosting runtime</strong> (how it runs in the cloud). The <code>src/</code> folder is the agent itself — instructions, skills, MCP config, tools, and knowledge. The <code>infra/assets/</code> folder is the Azure-specific runtime that wraps that agent for cloud execution.</span>
+        <span data-zh>HaeronClaw 将<strong>创作面</strong>（你写的内容）和<strong>托管运行时</strong>（云端如何运行）分离。<code>src/</code> 目录是 agent 本身 — 指令、skills、MCP 配置、工具和知识。<code>infra/assets/</code> 目录是将 agent 封装为云端服务的 Azure 运行时。</span>
+      </p>
+    </section>
+
+    <section class="content">
+      <h2 id="structure">
+        <span data-en>Project Structure</span>
+        <span data-zh>项目结构</span>
+      </h2>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-lang">text</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>src/                          # Agent definition, skills, tools, and work memory
+├── AGENTS.md                 # HaeronClaw instructions + optional function frontmatter
+├── .github/skills/           # Markdown skills loaded by the runtime
+├── .vscode/mcp.json          # MCP server configuration
+├── tools/
+│   ├── cost_estimator.py     # Pricing math helpers
+│   ├── create_eml.py         # EML generation helper
+│   ├── fetch_url.py          # URL ingestion helper
+│   └── m365_cli.py           # Mail, calendar, OneDrive, SharePoint operations
+├── work_memory/              # Domain knowledge and internal FAQ content
+└── index_memory/             # Indexed content for retrieval workflows
+
+infra/assets/                 # Azure Functions + Teams runtime implementation
+├── function_app.py           # HTTP/function entrypoints
+├── teams_bot.py              # Teams bot orchestration and proactive replies
+├── file_upload.py            # Azure Blob upload and download-link pipeline
+├── sharepoint_graph.py       # Graph-based SharePoint/OneDrive access
+├── speech_service.py         # Azure Speech integration for audio transcription
+├── scripts/                  # Install-time helpers for bundled runtime dependencies
+└── vendor/m365-cli/          # Repository-owned overrides applied after npm install
+
+teams-app/                    # Teams app manifests and sideload packages</code></pre>
+      </div>
+    </section>
+
+    <section class="content">
+      <h2 id="surfaces">
+        <span data-en>Three Surfaces</span>
+        <span data-zh>三个面</span>
+      </h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="card-icon">&#9997;&#65039;</div>
+          <h3><span data-en>Authoring Surface</span><span data-zh>创作面</span></h3>
+          <p>
+            <span data-en><code>AGENTS.md</code>, skills, MCP servers, Python tools, work memory. You write these in VS Code and test locally with Copilot Chat.</span>
+            <span data-zh><code>AGENTS.md</code>、skills、MCP servers、Python 工具、work memory。在 VS Code 中编写，本地用 Copilot Chat 测试。</span>
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="card-icon">&#9889;</div>
+          <h3><span data-en>Delivery Surface</span><span data-zh>交付面</span></h3>
+          <p>
+            <span data-en>HTTP API, SSE streaming, browser Chat UI, Teams bot, MCP endpoint. The same agent is accessible through multiple channels.</span>
+            <span data-zh>HTTP API、SSE 流式、浏览器聊天 UI、Teams bot、MCP 端点。同一个 agent 可通过多个渠道访问。</span>
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="card-icon">&#9729;&#65039;</div>
+          <h3><span data-en>Deployment Surface</span><span data-zh>部署面</span></h3>
+          <p>
+            <span data-en>Single <code>deploy.ps1</code> entry point provisions ACR, ACA, Storage, and optionally a Foundry account. Infrastructure is defined in Bicep under <code>infra/</code>.</span>
+            <span data-zh>统一的 <code>deploy.ps1</code> 入口预置 ACR、ACA、Storage，可选部署 Foundry 账户。基础设施通过 <code>infra/</code> 下的 Bicep 定义。</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content">
+      <h2 id="patches">
+        <span data-en>Bundled Dependency Patches</span>
+        <span data-zh>打包依赖补丁</span>
+      </h2>
+      <p>
+        <span data-en>The repository patches selected <code>m365-cli</code> files used by the Azure runtime. Source-controlled overrides live under <code>infra/assets/vendor/m365-cli/</code>. The post-install script <code>apply-m365-cli-patches.mjs</code> copies them into <code>node_modules/</code> after <code>npm install</code>.</span>
+        <span data-zh>仓库对 Azure 运行时使用的部分 <code>m365-cli</code> 文件做定制。版本控制中的覆盖文件位于 <code>infra/assets/vendor/m365-cli/</code>。<code>apply-m365-cli-patches.mjs</code> 在 <code>npm install</code> 后自动复制到 <code>node_modules/</code>。</span>
+      </p>
+    </section>
+
+    <section class="content">
+      <h2 id="limitations">
+        <span data-en>Known Limitations</span>
+        <span data-zh>已知限制</span>
+      </h2>
+      <ul>
+        <li>
+          <span data-en><strong>Python tools in <code>src/tools/</code> do not work locally</strong> — they are fully functional only after deploying to ACA.</span>
+          <span data-zh><strong><code>src/tools/</code> 下的 Python 工具在本地不可用</strong> — 仅部署到 ACA 后才能正常工作。</span>
+        </li>
+        <li>
+          <span data-en><strong>Windows is not supported</strong> for packaging hooks — the shell scripts require macOS, Linux, or WSL.</span>
+          <span data-zh><strong>Windows 不受支持</strong>用于打包 hook — shell 脚本需要 macOS、Linux 或 WSL。</span>
+        </li>
+      </ul>
+    </section>
+
+    <nav class="page-nav">
+      <a href="api.html" class="prev">
+        <span class="nav-label"><span data-en>Previous</span><span data-zh>上一页</span></span>
+        <span class="nav-title"><span data-en>← API Reference</span><span data-zh>← API 参考</span></span>
+      </a>
+      <div></div>
+    </nav>
+  </main>
+</div>
+
+<footer class="site-footer">
+  <span>HaeronClaw &middot; Hosted Agent Runtime on Azure Functions</span>
+  <div class="footer-links"><a href="https://github.com/haxudev/haeronclaw" target="_blank" rel="noopener noreferrer">GitHub</a></div>
+</footer>
+<button class="scroll-top" id="scroll-top" aria-label="Scroll to top">↑</button>
+<script src="js/main.js"></script>
+</body>
+</html>
